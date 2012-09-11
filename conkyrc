@@ -1,0 +1,73 @@
+background yes
+use_xft yes
+xftfont Bitstream Vera Sans Mono:size=9
+xftalpha 0.5
+update_interval 1.0
+total_run_times 0
+own_window yes
+own_window_type normal
+own_window_transparent yes
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+double_buffer yes
+minimum_size 230 5
+maximum_width 350
+draw_shades no
+draw_outline no
+draw_borders no
+draw_graph_borders yes
+default_color white
+default_shade_color black
+default_outline_color white
+alignment bottom_left
+gap_x 10
+gap_y 50
+#no_buffers yes
+uppercase no
+cpu_avg_samples 2
+override_utf8_locale no
+#${offset 5}${color}${pre_exec awk '/model name/' /proc/cpuinfo | sed -e 's/model name.*: //' | sed -e 's/  .*//'}${color red}${alignr}${freq_dyn_g}GHz
+#${offset 5}${color}${pre_exec cat /proc/cpuinfo | grep -m1 'model name' | sed -e 's/model name.*: //' | sed -e 's/  .*//'}${color red}${alignr}${freq_dyn_g}GHz
+#${offset 5}${color cornflowerblue}Public IP${alignr}${color}${execi 1000 wget -O - http://whatismyip.org/ | tail}
+
+TEXT
+${font size=45}${alignc}${color red}${execi 1000 whoami}${color}@${color cornflowerblue}$nodename
+${font}${color gold}SYSTEM ${hr 2}
+${offset 5}${color cornflowerblue}Distro${alignr}${color}${pre_exec cat /etc/issue.net}
+${offset 5}${color cornflowerblue}Gnome${alignr}${color}${pre_exec gnome-about --gnome-version | head -n 1 | awk '{print $2}'}
+${offset 5}${color cornflowerblue}Kernel${alignr}${color}$sysname $kernel
+${offset 5}${color cornflowerblue}Arch${alignr}${color}$machine
+${offset 5}${color cornflowerblue}UpTime${alignr}${color}${uptime}
+
+${color gold}CPU ${hr 2}
+${offset 5}${color cornflowerblue}CPU1 ${color red}${freq_g cpu1}GHz ${color}${cpu cpu1}% ${cpubar cpu1}
+${offset 5}${color cornflowerblue}CPU2 ${color red}${freq_g cpu2}GHz ${color}${cpu cpu2}% ${cpubar cpu2}
+${offset 5}${cpugraph cpu0 000000 ffffff}
+${offset 5}${cpugraph cpu0 000000 ffffff}
+${alignr}${color cornflowerblue}1m   5m  15m
+${offset 5}${color cornflowerblue}Load${alignr}${color}$loadavg
+${offset 5}${color cornflowerblue}Processes ${color}${processes}${alignr}${color cornflowerblue}Running ${color}${running_processes}
+
+${offset 5}${color cornflowerblue}Name              PID   CPU%   MEM%
+${offset 5}${color gold}${top name 1} ${top pid 1} ${top cpu 1} ${top mem 1}
+${offset 5}${color}${top name 2} ${top pid 2} ${top cpu 2} ${top mem 2}
+${offset 5}${color}${top name 3} ${top pid 3} ${top cpu 3} ${top mem 3}
+
+${offset 5}${color cornflowerblue}Name              PID   MEM%   CPU%
+${offset 5}${color gold}${top_mem name 1} ${top_mem pid 1} ${top_mem mem 1} ${top_mem cpu 1}
+${offset 5}${color}${top_mem name 2} ${top_mem pid 2} ${top_mem mem 2} ${top_mem cpu 2}
+${offset 5}${color}${top_mem name 3} ${top_mem pid 3} ${top_mem mem 3} ${top_mem cpu 3}
+
+${color gold}MEMORY / DISK ${hr 2}
+${offset 5}${color cornflowerblue}MEM${color}${alignr}${mem} / ${memmax}
+${offset 5}$membar
+${offset 5}${color cornflowerblue}SWAP${color}${alignr}${swap} / ${swapmax}
+${offset 5}$swapbar
+${offset 5}${color cornflowerblue}HDD${color}${alignr}${fs_used /} / ${fs_size /}
+${offset 5}${fs_bar /}
+
+${color gold}NETWORK ${hr 2}
+${offset 5}${color cornflowerblue}Private IP${color}$alignr${addr eth0}
+${offset 5}${color cornflowerblue}Down ${color}${downspeedf eth0} KB/s${color cornflowerblue}${alignr}Total ${color}${totaldown eth0}
+${offset 5}${downspeedgraph eth0 000000 ff0000}
+${offset 5}${color cornflowerblue}Up ${color}${upspeedf eth0} KB/s${color cornflowerblue}${alignr}Total ${color}${totalup eth0}
+${offset 5}${upspeedgraph eth0 000000 00ff00}
